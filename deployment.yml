@@ -1,0 +1,406 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-ceres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-ceres
+  template:
+    metadata:
+      labels:
+        app: loki-app-ceres
+    spec:
+      containers:
+        - name: loki-app-ceres
+          image: webapp:1
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-ceres-service
+  labels:
+    app: loki-app-ceres-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-ceres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-kratos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-kratos
+  template:
+    metadata:
+      labels:
+        app: loki-app-kratos
+    spec:
+      containers:
+        - name: loki-app-kratos
+          image: webapp:1
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-kratos-service
+  labels:
+    app: loki-app-kratos-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-kratos
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-pagos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-pagos
+  template:
+    metadata:
+      labels:
+        app: loki-app-pagos
+    spec:
+      containers:
+        - name: loki-app-pagos
+          image: webapp:1
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-pagos-service
+  labels:
+    app: loki-app-pagos-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-pagos
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-inyector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-inyector
+  template:
+    metadata:
+      labels:
+        app: loki-app-inyector
+    spec:
+      containers:
+        - name: loki-app-inyector
+          image: webapp:1
+          env:
+            - name: OC_CONFIG_URLS
+              value: "http://loki-app-gw-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/"
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-inyector-service
+  labels:
+    app: loki-app-inyector-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-inyector
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-tibco
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-tibco
+  template:
+    metadata:
+      labels:
+        app: loki-app-tibco
+    spec:
+      containers:
+        - name: loki-app-tibco
+          image: webapp:1
+          env:
+            - name: OC_CONFIG_URLS
+              value: "http://loki-app-ceres-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/"
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-tibco-service
+  labels:
+    app: loki-app-tibco-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-tibco
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-lb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-lb
+  template:
+    metadata:
+      labels:
+        app: loki-app-lb
+    spec:
+      containers:
+        - name: loki-app-lb
+          image: webapp:1
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-lb-service
+  labels:
+    app: loki-app-lb-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-lb
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-pangea
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-pangea
+  template:
+    metadata:
+      labels:
+        app: loki-app-pangea
+    spec:
+      containers:
+        - name: loki-app-pangea
+          image: webapp:1
+          env:
+            - name: OC_CONFIG_IS_PANGEA
+              value: "true"
+            - name: OC_CONFIG_URLS
+              value: "http://loki-app-ceres-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/,http://loki-app-kratos-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/,http://loki-app-inyector-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/,http://loki-app-pagos-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/"
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-pangea-service
+  labels:
+    app: loki-app-pangea-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-pangea
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-gw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-gw
+  template:
+    metadata:
+      labels:
+        app: loki-app-gw
+    spec:
+      containers:
+        - name: loki-app-gw
+          image: webapp:1
+          env:
+            - name: OC_CONFIG_URLS
+              value: "http://loki-app-tibco-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/"
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-gw-service
+  labels:
+    app: loki-app-gw-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-gw
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-bbddpedidos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-bbddpedidos
+  template:
+    metadata:
+      labels:
+        app: loki-app-bbddpedidos
+    spec:
+      containers:
+        - name: loki-app-bbddpedidos
+          image: webapp:1
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-bbddpedidos-service
+  labels:
+    app: loki-app-bbddpedidos-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-bbddpedidos
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-app-checkpedido
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki-app-checkpedido
+  template:
+    metadata:
+      labels:
+        app: loki-app-checkpedido
+    spec:
+      containers:
+        - name: loki-app-checkpedido
+          image: webapp:1
+          env:
+            - name: OC_CONFIG_IS_PANGEA
+              value: "true"
+            - name: OC_CONFIG_URLS
+              value: "http://loki-app-bbddpedidos-service-loki.odin-44e3056b95f04edb218dce5a8824d6b0-0001.eu-de.containers.appdomain.cloud/"
+          # for local development against minikube registry
+          #imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-app-checkpedido-service
+  labels:
+    app: loki-app-checkpedido-service
+spec:
+  type: NodePort
+  ports:
+    # the port that this service should serve on
+    - port: 80
+      targetPort: 8080
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app: loki-app-checkpedido

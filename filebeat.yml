@@ -1,0 +1,13 @@
+filebeat.inputs:
+  - input_type: log
+    paths: ["logs/*"]
+    json.keys_under_root: true
+    scan_frequency: 1s
+output.logstash:
+  hosts: ["logstash.monitor.svc.cluster.local:5044"]
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - decode_json_fields:
+      fields: ["message"]
+      target: ""
